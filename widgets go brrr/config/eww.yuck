@@ -1,0 +1,308 @@
+;; VARIABLES
+(defpoll temperature :interval "5m" "curl wttr.in/Trento?format=%t")
+(defpoll condition :interval "5m" "curl wttr.in/Trento?format=%C")
+(defpoll quote :interval "5m" "~/.config/eww/scripts/weatherquote.sh")
+(defpoll songicon :interval "3ms" "~/.config/eww/scripts/songicon.sh")
+(defpoll title :interval "3ms"  "~/.config/eww/scripts/title.sh")
+(defpoll artist :interval "3ms"  "~/.config/eww/scripts/artist.sh")
+(defpoll status :interval "3ms" "~/.config/eww/scripts/status.sh")
+(defpoll distro :interval "5m" "awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }'")
+(defpoll wm :interval "5m" "wmctrl -m | grep Name | cut -d: -f2")
+(defpoll shell :interval "5m" "echo $SHELL | awk -F'/' '{print $NF}'")
+;;(defpoll uptime :interval "30s" "uptime -p | sed -e 's/up //;s/ hours,/h/;s/ minutes/m/'")
+(defpoll uptime :interval "30s" "uptime -p | sed -e 's/up //;s/ hours/h/;s/ hour/h/;s/ minutes/m/;s/minute/m/'")
+(defpoll pkgs :interval "1m" "~/.config/eww/scripts/pkgs.sh")
+(defpoll christmas :interval "1m" "~/.config/eww/scripts/christmas.sh")
+(defpoll day :interval "1m" "date +%d")
+(defpoll month :interval "1m" "date +%B")
+(defpoll year :interval "1m" "date +%Y")
+(defpoll weekday :interval "1m" "date +%A")
+
+
+;; WIDGETS
+
+(defwidget directories []
+ (box :orientation "v"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "6"
+	(button :class "title"
+		:onclick "thunar /home/luxion&" "folders")
+ (box :orientation "v"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "10"
+    
+    (button :class "red"
+       	    :onclick "thunar /home/luxion/Downloads&" "downloads")
+    
+    (button :class "white"
+    	    :onclick "thunar /home/luxion/Pictures&" "pictures")
+    
+    (button :class "green"
+    	    :onclick "thunar /home/luxion/Pictures/Screenshots&" "screenshots")
+    
+    (button :class "blue"
+    	    :onclick "thunar /home/luxion/.minecraft&" "minecraft")
+    
+    (button :class "magenta"
+     	    :onclick "thunar /home/luxion/.config&" "config")
+
+    (button :class "cyan"
+    	    :onclick "thunar /home/luxion/dev&" "coding")
+  )
+)
+)
+(defwidget music [] 
+  (box :orientation "v"
+       :space-evenly false
+       :halign "center"   
+       :valign "center"
+       :hexpand false
+       :vexpand false
+       :spacing "8"
+       :hexpand "false"
+  (image :path "${songicon}"
+       :halign "fill"
+       :valign "fill"
+       :hexpand false
+       :vexpand false)
+  (label :class "title"
+  	 :text "${title}")
+  (label :class "artist"
+  	 :text "${artist}")
+  (box :orientation "h"
+       :halign "center"
+       :valign "center"
+       :spacing "20"
+	
+       (button :class "prevnext"
+	       :onclick "playerctl -p spotify previous" "")
+       (button :class "playpause"
+	       :onclick "playerctl -p spotify play-pause" "${status}")
+       (button :class "prevnext"
+       	       :onclick "playerctl -p spotify next" "")
+	
+   )
+  )
+)
+
+(defwidget fetch []
+(box :orientation "v"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "5"
+   (label :class "title"
+   	  :text "system info")
+  (box :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "10"
+  (box :orientation "v"
+       :spacing "8"
+   (label :class "white"
+   	  :text "os ~")
+   (label :class "white"
+          :text "wm ~")
+   (label :class "white"
+          :text "sh ~")
+   (label :class "white"
+          :text "up ~")
+   (label :class "white"
+   	  :text "pk ~")
+  )
+  (box :orientation "v"
+      :spacing "8"
+   (label :class "cyan"
+   	  :halign "start"
+  	  :text "${distro}")
+   (label :class "magenta"
+          :halign "start"
+   	  :text "${wm}")
+   (label :class "green"
+          :halign "start"
+   	  :text "${shell}")
+   (label :class "blue"
+          :halign "start"
+   	  :text "${uptime}")
+   (label :class "red"
+   	  :halign "start"
+	  :text "${pkgs}")
+   )
+  )
+)
+)
+
+(defwidget weather []
+ (box :orientation "v"
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+      :spacing "20"
+   (label :class "title"
+   	  :text "weather report")
+  (box :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "20"
+   (label :class "bigred"
+   	  :text "${condition}")
+   (label :class "bigblue"
+   	  :text "${temperature}")
+  )
+ (label :class "quote"
+ 	:text "${quote}")
+ )
+)
+
+(defwidget calendar []
+ (box :orientation "v"
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+      :spacing "20"
+  (label :class "title"
+  	 :text "calendar")
+  (label :class "bigblue"
+  	 :text "${day} ${month} ${year}")
+  (label :class "bigmagenta"
+  	 :text "${weekday}")
+  (label :class "green"
+  	 :text "${christmas}")
+ )
+)
+
+(defwidget links []
+ (box :orientation "v"
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+      :spacing "10"
+  (button :class "newpage"
+  	  :onclick "firefox" " new page")
+  (button :class "github"
+  	  :onclick "firefox www.github.com/thisisluxion/" " my github")
+ )
+)
+
+(defwidget powermenu []
+ (box :orientation "h"
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+  (button :class "title"
+  	 :onclick "eww open powertitle" "wanna go to bed?")
+ )
+)
+
+(defwidget powertitle []
+ (box :orientation "v"
+      :space-evenly false
+      :halign "center"
+      :valign "center"
+      :spacing "50"
+  (label :class "powertitle"
+  	 :text "Are you sure you want to quit?")
+  (box :orientation "h"
+       :space-evenly false
+       :halign "center"
+       :valign "center"
+       :spacing "60"
+   (button :class "poweroff"
+  	   :onclick "systemctl poweroff" "")
+   (button :class "reboot"
+  	   :onclick "systemctl reboot" "")
+   (button :class "exit"
+  	   :onclick "~/.config/eww/scripts/sleep.sh" "")
+   (button :class "cancel"
+   	   :onclick "eww close powertitle" "")
+  )
+ )
+)
+
+;;WINDOWS
+
+(defwindow directories
+           :monitor 0
+           :geometry (geometry :x "885px"
+                               :y "375px"
+                               :width "150px"
+                               :height "240px")
+           :windowtype "normal"
+           :wm-ignore true
+  (directories))
+
+(defwindow music
+           :monitor 0
+           :geometry (geometry :x "550px"
+                               :y "375px"
+                               :width "300px"
+                               :height "240px")
+           :windowtype "normal"
+           :wm-ignore true
+  (music))
+
+(defwindow fetch
+	   :monitor 0
+	   :geometry (geometry :x "550px"
+	   		       :y "100px"
+			       :width "150px"
+			       :height "240px")
+	  :windowtype "normal"
+	  :wm-ignore true
+(fetch))
+
+(defwindow weather
+	   :monitor 0
+	   :geometry (geometry :x "735px"
+	   		       :y "100px"
+			       :width "400px"
+			       :height "240px")
+	   :windowtype "normal"
+	   :wm-ignore true
+(weather))
+
+(defwindow calendar
+	   :monitor 0
+	   :geometry (geometry :x "1070px"
+	   		       :y "375px"
+			       :width "300px"
+			       :height "240px")
+	   :windowtype "normal"
+	   :wm-ignore true
+(calendar))
+
+(defwindow links
+	   :monitor 0
+	   :geometry (geometry :x "1170px"
+	   		       :y "100px"
+			       :width "200px"
+			       :height "103px")
+	   :windowtype "normal"
+	   :wm-ignore true
+(links))
+
+(defwindow powermenu
+	   :monitor 0
+	   :geometry (geometry :x "1170px"
+	   		       :y "238px"
+			       :width "200px"
+			       :height "102px")
+	   :windowtype "normal"
+	   :wm-ignore true
+(powermenu))
+
+(defwindow powertitle
+	   :monitor 0
+	   :geometry (geometry :x "0px"
+	   		       :y "0px"
+			       :width "1920px"
+			       :height "1080px")
+	   :windowtype "normal"
+	   :wm-ignore true
+(powertitle))
