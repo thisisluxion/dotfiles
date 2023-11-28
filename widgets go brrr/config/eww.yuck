@@ -1,6 +1,6 @@
 ;; VARIABLES
-(defpoll temperature :interval "5m" "curl wttr.in/Trento?format=%t")
-(defpoll condition :interval "5m" "curl wttr.in/Trento?format=%C")
+(defpoll temperature :interval "5m" "curl wttr.in/YOUR_CITY?format=%t")
+(defpoll condition :interval "5m" "curl wttr.in/YOUR_CITY?format=%C")
 (defpoll quote :interval "5m" "~/.config/eww/scripts/weatherquote.sh")
 (defpoll songicon :interval "3ms" "~/.config/eww/scripts/songicon.sh")
 (defpoll title :interval "3ms"  "~/.config/eww/scripts/title.sh")
