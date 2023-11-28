@@ -1,6 +1,6 @@
 #!/bin/bash
 
-w=$(curl -s "wttr.in/Trento?format=%C")
+w=$(curl -s "wttr.in/YOUR_CITY?format=%C")
 if [[ $w = 'Clear' ]]; then
                 echo "      The sky is crystal clear! \nDon't forget to take a look at the stars!"  
 elif [[ $w = 'Sunny' ]];then 
